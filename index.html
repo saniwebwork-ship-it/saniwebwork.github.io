@@ -292,12 +292,12 @@
           <span class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,.8)]"></span>Audit console</span>
           <span>Encrypted</span>
         </div>
-        <!--
-          FORM BACKEND: plug in your form service here (for example Formspree).
-          Set action="https://formspree.io/f/YOUR_FORM_ID" method="POST" on the <form> below,
-          then replace the simulated success in the submit handler (see "FORM BACKEND" in the script) with a fetch() POST.
-        -->
-        <form id="lead-form" class="space-y-6" novalidate>
+        <!-- Form backend: FormSubmit (no account). Submissions go to saniwebwork@gmail.com. -->
+        <form id="lead-form" action="https://formsubmit.co/saniwebwork@gmail.com" method="POST" class="space-y-6" novalidate>
+          <input type="hidden" name="_subject" value="New Sani Webwork video audit request">
+          <input type="hidden" name="_next" value="https://saniwebwork.com/?sent=1#audit">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
           <div>
             <label for="name" class="block font-mono text-[11px] uppercase tracking-[0.2em] text-neutral-500">Name</label>
             <input id="name" name="name" type="text" autocomplete="name" required placeholder="Your name" class="energy w-full rounded-t-lg placeholder-neutral-600 bg-white/[0.01] border-b-2 border-white/10 focus:border-emerald-400 focus:outline-none transition-all p-4 text-xl text-white">
@@ -434,6 +434,7 @@
     // Lead form validation
     (function () {
       var form = document.getElementById('lead-form');
+      if (/[?&]sent=1/.test(location.search)) { form.classList.add('hidden'); document.getElementById('thanks').classList.remove('hidden'); }
       function showErr(input, bad) {
         input.parentElement.querySelector('.err').classList.toggle('hidden', !bad);
         input.classList.toggle('border-rose-500', bad);
@@ -449,11 +450,8 @@
         showErr(name, nameBad); showErr(site, siteBad); showErr(email, emailBad);
         if (nameBad || siteBad || emailBad) { form.querySelector('[aria-invalid="true"]').focus(); return; }
         site.value = s;
-        // FORM BACKEND: replace this simulated success with your provider, e.g. Formspree:
-        // fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-        //   .then(function (r) { if (r.ok) { /* show thank-you */ } });
-        form.classList.add('hidden');
-        document.getElementById('thanks').classList.remove('hidden');
+        // Send to FormSubmit (saniwebwork@gmail.com); it redirects back to ?sent=1
+        form.submit();
       });
     })();
   </script>
